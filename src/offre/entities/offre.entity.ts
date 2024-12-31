@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Document } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 @Schema()
 export class Offre  extends Document{
@@ -14,11 +14,18 @@ export class Offre  extends Document{
   @Prop()
   datePublication: string ;
   @Prop()
-  entreprise:string ;
-  @Prop()
   statut: string ;
-  @Prop()
-  testAssocie:string ;
+  @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"commentaire"}]})
+  commentaireId : Types.ObjectId[];
+  @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"user"}]})
+  condidatId : Types.ObjectId[];
+  @Prop({type:mongoose.Schema.Types.ObjectId, ref:"user"})
+  entrepriseId : Types.ObjectId;
+  @Prop({type:mongoose.Schema.Types.ObjectId, ref:"user"})
+  adminId : Types.ObjectId;
+
+  @Prop({type:mongoose.Schema.Types.ObjectId, ref:"test"})
+  testId : Types.ObjectId;
 
 
 }

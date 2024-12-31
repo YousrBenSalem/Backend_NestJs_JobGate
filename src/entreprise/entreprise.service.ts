@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEntrepriseDto } from './dto/create-entreprise.dto';
 import { UpdateEntrepriseDto } from './dto/update-entreprise.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { IEntreprise } from './interface/entreprise.interface';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class EntrepriseService {
-  create(createEntrepriseDto: CreateEntrepriseDto) {
-    return 'This action adds a new entreprise';
+  constructor(
+    @InjectModel('user') private entrepriseModel: Model<IEntreprise>
+  ){}
+  async createEntreprise(createEntrepriseDto: CreateEntrepriseDto):Promise<IEntreprise> {
+    const newEntreprise = await new this.entrepriseModel({...createEntrepriseDto , item :"entreprise"});
+    return newEntreprise.save();
   }
 
-  findAll() {
-    return `This action returns all entreprise`;
+  async getAllEntreprises() : Promise <IEntreprise[]> {
+    const entrepriseData = await this.entrepriseModel.find({item: "entreprise"});
+    if(!entrepriseData || entrepriseData.length == 0){
+      throw new NotFoundException("entreprises data not found")
+      
+    }
+    return entrepriseData;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} entreprise`;
+  async getEntrepriseById(entrepriseId: string):Promise<IEntreprise> {
+    const existingEntreprise = await this.entrepriseModel.findById(entrepriseId).exec();
+    if(!existingEntreprise){
+      throw new NotFoundException("entreprise not found");
+      }
+      return existingEntreprise;
   }
 
-  update(id: number, updateEntrepriseDto: UpdateEntrepriseDto) {
-    return `This action updates a #${id} entreprise`;
+  async updateEntreprise(entrepriseId: string, updateEntrepriseDto: UpdateEntrepriseDto) {
+    const updatedEntreprise = await this.entrepriseModel.findByIdAndUpdate(entrepriseId , updateEntrepriseDto ,{new : true});
+    if(!updatedEntreprise){
+      throw new NotFoundException("entreprise not found");
+      }
+      return updatedEntreprise;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} entreprise`;
+  async removeEntreprise(entrepriseId: string) {
+    const deletedEntreprise = await this.entrepriseModel.findByIdAndDelete(entrepriseId)
+    if(!deletedEntreprise){
+      throw new NotFoundException("entreprise not found");
+      }
+      return deletedEntreprise;
   }
 }

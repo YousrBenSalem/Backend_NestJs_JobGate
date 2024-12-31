@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 import {Prop , Schema , SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import mongoose, {Document, Types} from 'mongoose';
 @Schema()
 export class Experience extends Document {
-  @Prop()
-  NomDeEntreprise: string ;
+  
   @Prop()
   poste: string ;
   @Prop()
@@ -13,6 +12,10 @@ export class Experience extends Document {
   dateDeFin : string ;
   @Prop()
   description : string ;
+  @Prop({type:mongoose.Schema.Types.ObjectId, ref:"profilCondidat"})
+  profilCondidatId : Types.ObjectId;
+  @Prop({type:mongoose.Schema.Types.ObjectId, ref:"user"})
+  entrepriseId : Types.ObjectId;
 
   
 }

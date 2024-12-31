@@ -4,6 +4,7 @@ import { CompetanceService } from './competance.service';
 import { CompetanceController } from './competance.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CompetanceSchema } from './entities/competance.entity';
+import { UserSchema } from 'src/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -11,6 +12,10 @@ import { CompetanceSchema } from './entities/competance.entity';
       {
         name:'competance',
         schema: CompetanceSchema,
+      },
+      {
+        name:'user',
+        schema: UserSchema,
       }
     ])
   ],

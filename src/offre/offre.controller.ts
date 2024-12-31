@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put } from '@nestjs/common';
 import { OffreService } from './offre.service';
 import { CreateOffreDto } from './dto/create-offre.dto';
 import { UpdateOffreDto } from './dto/update-offre.dto';
@@ -8,27 +9,78 @@ export class OffreController {
   constructor(private readonly offreService: OffreService) {}
 
   @Post()
-  create(@Body() createOffreDto: CreateOffreDto) {
-    return this.offreService.create(createOffreDto);
-  }
+  async createAdmin(
+      @Res() response ,
+      @Body() createOffreDto: CreateOffreDto) {
+        try {
+          const newOffre = await this.offreService.createOffre(createOffreDto); 
+          return response.status(HttpStatus.CREATED).json({ message: 'Offre created successfully', newOffre });
+          
+        } catch (err) {
+          return response.status(HttpStatus.BAD_REQUEST).json({
+  
+            message: 'Error creating offre'+err,
+  
+          })
+          
+        }
+      
+    }
 
   @Get()
-  findAll() {
-    return this.offreService.findAll();
-  }
+  async findAllOffres(@Res() response) {
+try {
+  const offres = await this.offreService.findAllOffres();
+  return response.status(HttpStatus.OK).json({
+        message: 'Offers retrieved successfully',
+        offres
+      });
+
+  
+}  catch (err) {
+      return response.status(err.status).json(err.response)
+  
+}  }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.offreService.findOne(+id);
+  async findOfferById(
+    @Res() response ,
+    @Param('id') offreId: string) {
+      try {
+        const offre = await this.offreService.findOfferById(offreId);
+        return response.status(HttpStatus.OK).json({ message: 'Offer retrieved successfully', offre });
+        
+      } catch (err) {
+        return response.status(HttpStatus.NOT_FOUND).json(err.Response);
+        
+      }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOffreDto: UpdateOffreDto) {
-    return this.offreService.update(+id, updateOffreDto);
+  @Put(':id')
+  async updateOffer(
+    @Res() response ,
+    @Param('id') offerId: string, @Body() updateOffreDto: UpdateOffreDto) {
+    try {
+      const updatedOffer= await  this.offreService.updateOffer(offerId, updateOffreDto);
+        return response.status(HttpStatus.OK).json({ message: 'Offer updated successfully', updatedOffer });
+
+    } catch (err) {
+        return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Error updating offer' + err });
+      
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.offreService.remove(+id);
+  async removeOffer(
+    @Res() response ,
+    @Param('id') offerId: string) {
+    try {
+      const deletedOffer = await this.offreService.removeOffer(offerId);
+      return response.status(HttpStatus.OK).json({ message: 'Offer deleted successfully', deletedOffer });
+      
+    } catch (err) {
+      return response.status(err.status).json(err.response);
+      
+    }
   }
 }

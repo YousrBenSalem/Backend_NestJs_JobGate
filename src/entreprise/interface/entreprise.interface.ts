@@ -1,12 +1,18 @@
 /* eslint-disable prettier/prettier */
+import { Types } from "mongoose";
 import { IUser } from "src/user/interface/user.interface";
 
 export interface IEntreprise extends IUser{
-  readonly  logo:string ;
+    logo:string ;
   readonly  secteur:string ;
-  readonly  offres:string ;
-  readonly  profilsRecherchés :string[];
+
   readonly  adresse:string ;
+
+   condidatId : Types.ObjectId[];
+   commentaireId : Types.ObjectId[];
+  readonly profilCondidatRecherchéId : Types.ObjectId[];
+  readonly offreId : Types.ObjectId[];
+
   
   readonly  item :string
 }

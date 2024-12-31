@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Param, Delete, HttpStatus, Res, Put } from '@nestjs/common';
 import { TestService } from './test.service';
 import { CreateTestDto } from './dto/create-test.dto';
 import { UpdateTestDto } from './dto/update-test.dto';
@@ -8,27 +9,66 @@ export class TestController {
   constructor(private readonly testService: TestService) {}
 
   @Post()
-  create(@Body() createTestDto: CreateTestDto) {
-    return this.testService.create(createTestDto);
+  async createTest(
+    @Res() response ,
+    @Body() createTestDto: CreateTestDto) {
+    try {
+      const newTest = await  this.testService.createTest(createTestDto);
+      return response.status(HttpStatus.CREATED).json({ message: 'Test created successfully',  newTest})
+    } catch (err) {
+      return response.status(HttpStatus.BAD_REQUEST).json({
+        message: 'Error creating test'+err,})
+            
+          }
   }
 
   @Get()
-  findAll() {
-    return this.testService.findAll();
-  }
+  async findAllTests(@Res() response) {
+try {
+  const tests = await this.testService.findAllTests();
+  return response.status(HttpStatus.OK).json({ message: 'Tests retrieved successfully', tests })
+} catch (err) {
+      return response.status(err.status).json(err.response)
+      
+    } }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.testService.findOne(+id);
-  }
+  async findTestById(
+    @Res() response ,
+    @Param('id') testId: string) {
+      try {
+            const test = await  this.testService.findTestById(testId);
+            return response.status(HttpStatus.OK).json({ message: 'Test retrieved successfully', test })
+        
+      } catch (err) {
+        return response.status(HttpStatus.NOT_FOUND).json(err.Response);
+        
+      }  }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTestDto: UpdateTestDto) {
-    return this.testService.update(+id, updateTestDto);
+  @Put(':id')
+  async updateTest(
+    @Res() response , 
+    @Param('id') testId: string, @Body() updateTestDto: UpdateTestDto) {
+    try {
+      const updatedTest = await this.testService.updateTest(testId , updateTestDto )
+      return response.status(HttpStatus.OK).json({ message: 'Test updated successfully', updatedTest })
+      
+    } catch (err) {
+      return response.status(HttpStatus.BAD_REQUEST).json({ message: 'Error updating test' + err });
+      
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.testService.remove(+id);
-  }
+  async removeTest(
+    @Res() response ,
+    @Param('id') testId: string) {
+try {
+      const deletedTest = await this.testService.removeTest(testId);
+      return response.status(HttpStatus.OK).json({ message: 'Test deleted successfully', deletedTest })
+  
+} catch (err) {
+    return response.status(err.status).json(err.response);
+  
+}  }
 }

@@ -1,10 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { IsNotEmpty, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 export class CreateExperienceDto {
-  @IsString()
-  @IsNotEmpty()
-  readonly NomDeEntreprise: string ;
+
   @IsString()
   @IsNotEmpty()
   readonly poste: string ;
@@ -17,4 +16,6 @@ export class CreateExperienceDto {
   @IsString()
   @IsNotEmpty()
   readonly description : string ;
+  readonly profilCondidatId : Types.ObjectId;
+  readonly   entrepriseId : Types.ObjectId;
 }

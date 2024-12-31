@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
 @Schema()
 export class Question extends Document {
@@ -10,5 +10,8 @@ export class Question extends Document {
   choix: string[];
   @Prop()
   reponseCorrecte: string;
+    @Prop({types:[{type:mongoose.Schema.Types.ObjectId, ref:"test"}]})
+    testId : Types.ObjectId[];
+
 }
 export const QuestionSchema = SchemaFactory.createForClass(Question)

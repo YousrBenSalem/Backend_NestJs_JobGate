@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsNumber, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 export class CreateTestDto {
   @IsString()
@@ -8,6 +9,7 @@ export class CreateTestDto {
   readonly  description: string;
   @IsNumber()
   readonly  scoreMinimum : number;
-  @IsString()
-  readonly  questions:string ;
+  readonly  offreId : Types.ObjectId[];
+  readonly   questionId : Types.ObjectId[];
+
 }
