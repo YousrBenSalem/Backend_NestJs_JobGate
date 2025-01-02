@@ -15,6 +15,7 @@ import { AdminModule } from './admin/admin.module';
 import { EntrepriseModule } from './entreprise/entreprise.module';
 import { CondidatModule } from './condidat/condidat.module';
 import { ConfigModule } from "@nestjs/config";
+import { AuthModule } from './auth/auth.module';
 
 
 @Module({
@@ -31,7 +32,8 @@ import { ConfigModule } from "@nestjs/config";
     AdminModule,
     EntrepriseModule,
     CondidatModule,
-    ConfigModule.forRoot({isGlobal:true})
+    ConfigModule.forRoot({isGlobal:true}),
+    AuthModule
 
   ],
   controllers: [AppController],

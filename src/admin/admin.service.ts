@@ -5,16 +5,21 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { IAdmin } from './interface/admin.interface';
 import { Model } from 'mongoose';
+import * as argon2 from "argon2";
+
 
 @Injectable()
 export class AdminService {
   constructor (
     @InjectModel('user') private adminModel: Model<IAdmin>
   ){}
-
+        hashData(data: string) {
+    return argon2.hash(data);
+  }
   async createAdmin(createAdminDto: CreateAdminDto): Promise<IAdmin> {
+    const hashedPassword = await this.hashData(createAdminDto.password);
 
-    const newAdmin = await new this.adminModel({...createAdminDto, item :"admin"});
+    const newAdmin = await new this.adminModel({...createAdminDto, item :"admin" , password:hashedPassword});
     return newAdmin.save()
   }
 

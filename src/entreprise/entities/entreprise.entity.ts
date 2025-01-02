@@ -11,6 +11,11 @@ export class Entreprise extends User {
 
   @Prop()
   logo:string ;
+  
+  @Prop()
+  description:string ;
+  @Prop()
+  webSite:string ;
   @Prop()
   secteur:string ;
   @Prop()

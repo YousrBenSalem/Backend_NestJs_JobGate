@@ -19,11 +19,20 @@ export class CreateOffreDto {
   @IsNotEmpty()
   readonly datePublication: string ;
   @IsString()
-  @IsNotEmpty()
   readonly statut: string ;
+    @IsString()
+  readonly type: string ;
   readonly commentaireId : Types.ObjectId[];
   readonly condidatId : Types.ObjectId[];
   readonly entrepriseId : Types.ObjectId;
   readonly adminId : Types.ObjectId;
     readonly   testId : Types.ObjectId;
+
+     readonly responsibilities: string ;
+    readonly  education: string ;
+    readonly  experience: string ;
+    readonly  otherBenifits: string ;
+    readonly  salary: string ;
+    readonly  gender: string ;
+    readonly  applicationDeadline: string ;
 }

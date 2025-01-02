@@ -14,7 +14,23 @@ export class Offre  extends Document{
   @Prop()
   datePublication: string ;
   @Prop()
-  statut: string ;
+  status: string ;
+  @Prop()
+  type: string ;
+    @Prop()
+  responsibilities: string ;
+  @Prop()
+  education: string ;
+  @Prop()
+  experience: string ;
+  @Prop()
+  otherBenifits: string ;
+    @Prop()
+  salary: string ;
+  @Prop()
+  gender: string ;
+@Prop()
+  applicationDeadline: string ;
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"commentaire"}]})
   commentaireId : Types.ObjectId[];
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"user"}]})

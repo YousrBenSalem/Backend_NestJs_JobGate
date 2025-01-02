@@ -8,6 +8,14 @@ logo:string ;
   @IsString()
 
   readonly  secteur:string ;
+  @IsString()
+
+  readonly   webSite:string ;
+
+  @IsString()
+
+  readonly  description:string ;
+
   
   
     @IsString()
@@ -18,5 +26,5 @@ logo:string ;
    condidatId : Types.ObjectId[];
     commentaireId : Types.ObjectId[];
   readonly profilCondidatRecherchéId : Types.ObjectId[];
-  readonly offreId : Types.ObjectId[];
+   offreId : Types.ObjectId[];
 }

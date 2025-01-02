@@ -4,6 +4,7 @@ import { OffreService } from './offre.service';
 import { OffreController } from './offre.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { OffreSchema } from './entities/offre.entity';
+import { UserSchema } from 'src/user/entities/user.entity';
 
 @Module({
   imports: [
@@ -11,7 +12,10 @@ import { OffreSchema } from './entities/offre.entity';
       {
         name:'offre',
         schema:OffreSchema
-      }
+      },  {
+              name:'user',
+              schema: UserSchema,
+            }
     ])
   ],
   controllers: [OffreController],
