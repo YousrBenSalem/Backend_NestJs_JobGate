@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 export class CreateUserDto {
   @IsString()
@@ -16,6 +17,10 @@ export class CreateUserDto {
    refreshToken: string ;
     code : string ;
     verify : boolean ;
+  isOnline: boolean;
+
+        commentaireId : Types.ObjectId[];
+    
 
 
 }

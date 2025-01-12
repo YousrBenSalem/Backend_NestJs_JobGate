@@ -13,7 +13,7 @@ export class Offre  extends Document{
   localisation: string ;
   @Prop()
   datePublication: string ;
-  @Prop()
+  @Prop({default:"Pending"})
   status: string ;
   @Prop()
   type: string ;
@@ -24,11 +24,14 @@ export class Offre  extends Document{
   @Prop()
   experience: string ;
   @Prop()
+
   otherBenifits: string ;
     @Prop()
   salary: string ;
   @Prop()
   gender: string ;
+    @Prop()
+  category: string ;
 @Prop()
   applicationDeadline: string ;
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"commentaire"}]})

@@ -18,15 +18,17 @@ export class CreateOffreDto {
   @IsString()
   @IsNotEmpty()
   readonly datePublication: string ;
-  @IsString()
   readonly statut: string ;
     @IsString()
   readonly type: string ;
+  @IsString()
+  readonly  category: string ;
+
   readonly commentaireId : Types.ObjectId[];
   readonly condidatId : Types.ObjectId[];
   readonly entrepriseId : Types.ObjectId;
   readonly adminId : Types.ObjectId;
-    readonly   testId : Types.ObjectId;
+       testId : Types.ObjectId;
 
      readonly responsibilities: string ;
     readonly  education: string ;

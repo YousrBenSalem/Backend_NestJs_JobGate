@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 import { Document, Types } from "mongoose";
 export interface ICommentaire extends Document {
-  readonly auteur :string ;
-  readonly contenu :string ;
-  readonly date :string ;
-  readonly condidatId : Types.ObjectId;
-  readonly entrepriseId : Types.ObjectId;
+  readonly content :string ;
+readonly userId : Types.ObjectId;
+
+   readonly replies : Types.ObjectId [];
   readonly offreId : Types.ObjectId;
+    parentCommentId? : Types.ObjectId;
+
 
 
   

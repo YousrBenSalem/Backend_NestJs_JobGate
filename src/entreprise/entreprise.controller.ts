@@ -53,6 +53,29 @@ export class EntrepriseController {
     }
   }
 
+    @Put("/updateStatus/:id")
+  async UpdateStatus(
+    @Res() response,
+    @Param("id") entrepriseId: string,
+  ){
+    try {
+      const existingEntreprise = await this.entrepriseService.updateStatus(
+        entrepriseId,
+      );
+      return response.status(HttpStatus.OK).json({
+        message: "Entreprise status has been successfully updated",
+        existingEntreprise,
+      });
+      
+    } catch (err) {
+            return response.status(err.status).json({
+              message: err.message,
+              status :HttpStatus.BAD_REQUEST
+            });
+
+    }
+  }
+
   @Get(':id')
   async getEntrepriseById(
     @Res() response,

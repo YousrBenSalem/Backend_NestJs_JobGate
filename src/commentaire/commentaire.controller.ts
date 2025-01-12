@@ -3,10 +3,14 @@ import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put } from
 import { CommentaireService } from './commentaire.service';
 import { CreateCommentaireDto } from './dto/create-commentaire.dto';
 import { UpdateCommentaireDto } from './dto/update-commentaire.dto';
+import { CommentsGateway } from './commentaire.gateway';
 
 @Controller('commentaire')
 export class CommentaireController {
-  constructor(private readonly commentaireService: CommentaireService) {}
+  constructor(private readonly commentaireService: CommentaireService ,
+  private readonly CommentaireGateway: CommentsGateway,
+
+  ) {}
 
   @Post()
   async createCommentaire(
@@ -14,12 +18,49 @@ export class CommentaireController {
     @Body() createCommentaireDto: CreateCommentaireDto) {
     try {
       const newCommentaire= await this.commentaireService.createCommentaire(createCommentaireDto);
+          this.CommentaireGateway.notifyNewComment(newCommentaire);
+
+      
+
       return response.status(201).json({ message: 'Commentaire created successfully', newCommentaire})
     } catch (err) {
         return response.status(err.status).json(err.response);
       
     }
   }
+
+  @Post(":id/reply")
+    async replyToComment(@Param('id') id: string, @Body() createCommentaireDto: CreateCommentaireDto,     @Res() response , 
+) {
+      try {
+          const replyCommentaire = await this.commentaireService.addReplyToComment(id, createCommentaireDto);
+
+              return response.status(201).json({ message: 'reply created successfully', replyCommentaire})
+        
+      } catch (error) {
+              return response.status(error.status).json(error.response);
+        
+      }
+  
+  }
+
+
+  @Get('offer/:offerId')
+    async getCommentsByOffer(@Param('offerId') offerId: string, @Res() response , 
+) {
+      try {
+          const commentByoffer = await this.commentaireService.getCommentsByOffer(offerId);;
+
+              return response.status(201).json({ message: 'commentByoffer récupéré successfully', commentByoffer})
+        
+      } catch (error) {
+              return response.status(error.status).json(error.response);
+        
+      }
+  
+  }
+
+
 
   @Get()
   async getAllCommentaires(@Res() response) {

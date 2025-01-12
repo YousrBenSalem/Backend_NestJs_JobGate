@@ -11,9 +11,10 @@ export interface IEntreprise extends IUser{
   readonly  secteur:string ;
 
   readonly  adresse:string ;
+     readonly status:string ;
 
    condidatId : Types.ObjectId[];
-   commentaireId : Types.ObjectId[];
+
   readonly profilCondidatRecherchéId : Types.ObjectId[];
    offreId : Types.ObjectId[];
 

@@ -47,6 +47,61 @@ try {
   
 }
   }
+@Put("/updateStatusPostulation/:id")
+async updateStatusAcceptable(
+  @Res() response,
+  @Param("id") condidatId: string,
+){
+  try {
+    console.log("Mise à jour du statut pour le candidat:", condidatId, );
+
+    const updateStatus = await this.condidatService.updateStatusAcceptable(condidatId);
+
+    if (!updateStatus) {
+      throw new Error('Aucune mise à jour effectuée');
+    }
+
+    return response.status(HttpStatus.OK).json({
+      message: "Postulation status du candidat mis à jour avec succès",
+      updateStatus,
+    });
+    
+  } catch (err) {
+    console.error("Erreur dans la mise à jour du statut:", err.message);
+    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      message: err.message,
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+@Put("/updateStatusPostulationReject/:id")
+async updateStatusReject(
+  @Res() response,
+  @Param("id") condidatId: string,
+){
+  try {
+    console.log("Mise à jour du statut pour le candidat:", condidatId, );
+
+    const updateStatus = await this.condidatService.updateStatusAcceptableReject(condidatId);
+
+    if (!updateStatus) {
+      throw new Error('Aucune mise à jour effectuée');
+    }
+
+    return response.status(HttpStatus.OK).json({
+      message: "Postulation status du candidat mis à jour avec succès",
+      updateStatus,
+    });
+    
+  } catch (err) {
+    console.error("Erreur dans la mise à jour du statut:", err.message);
+    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      message: err.message,
+      status: HttpStatus.INTERNAL_SERVER_ERROR,
+    });
+  }
+}
+
 
   @Get()
   async getCondidats(@Res() response) {

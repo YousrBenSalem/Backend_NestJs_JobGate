@@ -1,20 +1,22 @@
 /* eslint-disable prettier/prettier */
 import {Prop , Schema , SchemaFactory} from "@nestjs/mongoose";
 import mongoose, {Document, Types} from "mongoose";
-@Schema()
+@Schema({timestamps:true})
 export class Commentaire  extends Document{
-  @Prop()
-  auteur : string ;
+  
 
   @Prop()
-  contenu : string ;
+  content : string ;
 
-  @Prop()
-  date : string ;
+
   @Prop({type : mongoose.Schema.Types.ObjectId , ref:'user'})
-  condidatId : Types.ObjectId;
-    @Prop({type : mongoose.Schema.Types.ObjectId , ref:'user'})
-  entrepriseId : Types.ObjectId;
+  userId : Types.ObjectId;
+  @Prop({type:[{type : mongoose.Schema.Types.ObjectId , ref:'commentaire'}], default:null})
+  parentCommentId : Types.ObjectId;
+
+  @Prop({type:[{type : mongoose.Schema.Types.ObjectId , ref:'commentaire'}]})
+  replies : Types.ObjectId[];
+
     @Prop({type:mongoose.Schema.Types.ObjectId, ref:"offre"})
     offreId : Types.ObjectId;
 }

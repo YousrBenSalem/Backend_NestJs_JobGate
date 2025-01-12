@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 export interface IUser extends Document{
     readonly name: string;
@@ -7,7 +7,12 @@ export interface IUser extends Document{
     password: string;
     refreshToken: string ;
     code : string ;
-        verify : boolean ;
+    verify : boolean ;
+
+    commentaireId : Types.ObjectId[];
+      isOnline: boolean;
+
+        
 
 
 

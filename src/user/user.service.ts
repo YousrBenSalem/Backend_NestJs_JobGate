@@ -99,5 +99,9 @@ async hachPassword( userId: string,hachagePasswordDto: HachagePasswordDto): Prom
         
   }
 
+    async updateUserStatus(userId: string, isOnline: boolean):Promise<IUser> {
+    return this.userModel.findByIdAndUpdate(userId, { isOnline }, { new: true });
+  }
+
 
 }

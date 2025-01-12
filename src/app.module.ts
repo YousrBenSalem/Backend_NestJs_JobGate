@@ -9,13 +9,14 @@ import { ExperienceModule } from './experience/experience.module';
 import { ProfilCondidatModule } from './profil-condidat/profil-condidat.module';
 import { OffreModule } from './offre/offre.module';
 import { TestModule } from './test/test.module';
-import { QuestionModule } from './question/question.module';
+
 import { UserModule } from './user/user.module';
 import { AdminModule } from './admin/admin.module';
 import { EntrepriseModule } from './entreprise/entreprise.module';
 import { CondidatModule } from './condidat/condidat.module';
 import { ConfigModule } from "@nestjs/config";
 import { AuthModule } from './auth/auth.module';
+import { ChatModule } from './chat/chat.module';
 
 
 @Module({
@@ -27,13 +28,13 @@ import { AuthModule } from './auth/auth.module';
     ProfilCondidatModule,
     OffreModule,
     TestModule,
-    QuestionModule,
     UserModule,
     AdminModule,
     EntrepriseModule,
     CondidatModule,
     ConfigModule.forRoot({isGlobal:true}),
-    AuthModule
+    AuthModule,
+    ChatModule
 
   ],
   controllers: [AppController],

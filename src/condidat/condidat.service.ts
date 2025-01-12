@@ -45,7 +45,7 @@ Nous sommes ravis que vous ayez rejoint notre plateforme de recrutement. Pour fi
 Votre code de vérification est : ${code}
 
 Ou cliquez sur le lien suivant pour vérifier votre email :
-http://localhost:3000/candidate/verify/${code}
+http://localhost:3000/user/verify/${code}
 
 Merci,
 L'équipe Recrutement`,
@@ -106,7 +106,33 @@ L'équipe Recrutement`,
     }
     return existingCondidat
   }
+  async updateStatusAcceptable(
+    condidatId: string
+    ): Promise<ICondidat> {
+  
+        const existingCondidat = await this.condidatModel.findOneAndUpdate(
+          {_id:condidatId,item:'condidat'} , {$set : {postulationStatus :"Acceptable"}}, { new: true },);
+        if (!existingCondidat) {
+          throw new NotFoundException(`condidat #${condidatId} not found`);
+          }
+          /* const updateCondidat = await existingCondidat.save() */
+          return existingCondidat;
+          
+          }
 
+    async updateStatusAcceptableReject(
+    condidatId: string
+    ): Promise<ICondidat> {
+  
+        const existingCondidat = await this.condidatModel.findOneAndUpdate(
+          {_id:condidatId,item:'condidat'} , {$set : {postulationStatus :"Rejected"}}, { new: true },);
+        if (!existingCondidat) {
+          throw new NotFoundException(`condidat #${condidatId} not found`);
+          }
+          /* const updateCondidat = await existingCondidat.save() */
+          return existingCondidat;
+          
+          }
   async removeCondidat(condidatId: string) {
     const deletedCondidat = await this.condidatModel.findByIdAndDelete(condidatId).exec();
     if(!deletedCondidat){

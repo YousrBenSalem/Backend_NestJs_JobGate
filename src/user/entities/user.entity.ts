@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
 
 @Schema({ discriminatorKey: "item" })
@@ -18,6 +18,12 @@ export class User extends Document{
   code : string ;
   @Prop({default : false })
   verify : boolean ;
+
+   @Prop({ default: false })
+  isOnline: boolean;
+
+    @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"commentaire"}]})
+    commentaireId : Types.ObjectId[];
 
 }
 export const UserSchema = SchemaFactory.createForClass(User);

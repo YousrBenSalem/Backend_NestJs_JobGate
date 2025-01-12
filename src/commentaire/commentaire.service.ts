@@ -5,15 +5,15 @@ import { UpdateCommentaireDto } from './dto/update-commentaire.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from "mongoose";
 import { ICommentaire } from './interface/commentaire.interface';
-import { ICondidat } from 'src/condidat/interface/condidat.interface';
-import { IEntreprise } from 'src/entreprise/interface/entreprise.interface';
+
+import { IUser } from 'src/user/interface/user.interface';
 
 @Injectable()
 export class CommentaireService {
   constructor(
     @InjectModel('commentaire') private commentaireModel : Model<ICommentaire>,
-    @InjectModel('user') private condidatModel : Model<ICondidat>,
-    @InjectModel('user') private entrepriseModel : Model<IEntreprise>,
+    @InjectModel('user') private userModel : Model<IUser>,
+
 
     
 
@@ -22,17 +22,17 @@ export class CommentaireService {
   async createCommentaire(createCommentaireDto: CreateCommentaireDto) : Promise<ICommentaire> {
     const newCommentaire = await new this.commentaireModel(createCommentaireDto)
     const savedCommentaire = await newCommentaire.save() as ICommentaire  ;
-    const condidat = await this.condidatModel.findById(createCommentaireDto.condidatId);
-    if(condidat){
-      condidat.commentaireId.push(savedCommentaire._id as mongoose.Types.ObjectId);
-      const savedCondidat = await condidat.save();
+    const user = await this.userModel.findById(createCommentaireDto.userId);
+    if(user){
+      user.commentaireId.push(savedCommentaire._id as mongoose.Types.ObjectId);
+      const savedCondidat = await user.save();
             console.log(savedCondidat)
 
     }else {
-      console.log("condidat not found")
+      console.log("user not found")
     }
 
-      const entreprise = await this.entrepriseModel.findById(createCommentaireDto.entrepriseId);
+    /*   const entreprise = await this.entrepriseModel.findById(createCommentaireDto.entrepriseId);
     if(entreprise){
       entreprise.commentaireId.push(savedCommentaire._id as mongoose.Types.ObjectId);
       const savedEntreprise = await entreprise.save();
@@ -40,8 +40,23 @@ export class CommentaireService {
 
     }else {
       console.log("entreprise not found")
-    }
+    } */
     return savedCommentaire ;
+  }
+
+  async getCommentsByOffer(offerId: string): Promise<ICommentaire[]> {
+    return this.commentaireModel.find({ offreId: offerId }).populate('userId').exec();
+  }
+
+   async addReplyToComment(commentId: string, replyDto: CreateCommentaireDto): Promise<ICommentaire> {
+    const comment = await this.commentaireModel.findById(commentId);
+    if (comment) {
+      const reply = new this.commentaireModel(replyDto);
+      await reply.save();
+      comment.replies.push(reply._id as mongoose.Types.ObjectId);
+      await comment.save();
+      return reply;
+    }
   }
 
   async getAllCommentaires(): Promise<ICommentaire[]> {
@@ -74,21 +89,15 @@ export class CommentaireService {
   if(!deletedCommentaire){
       throw new NotFoundException(`Commentaire #${commentaireId} not found`);
       }
-      const condidat = await this.condidatModel.findById(deletedCommentaire.condidatId)
-    if (condidat){
-      condidat.commentaireId = condidat.commentaireId.filter(comId => comId.toString() !==commentaireId)
-      await condidat.save()
+      const user = await this.userModel.findById(deletedCommentaire.userId)
+    if (user){
+      user.commentaireId = user.commentaireId.filter(comId => comId.toString() !==commentaireId)
+      await user.save()
     }else {
       console.log("condidat not found")
     }
 
-      const entreprise = await this.entrepriseModel.findById(deletedCommentaire.entrepriseId)
-    if (entreprise){
-      entreprise.commentaireId = entreprise.commentaireId.filter(comId => comId.toString() !==commentaireId)
-      await entreprise.save()
-    }else {
-      console.log("entreprise not found")
-    }
+  
       return deletedCommentaire;
   }
 }

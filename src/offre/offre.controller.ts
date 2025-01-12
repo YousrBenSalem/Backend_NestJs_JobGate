@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put, HttpException } from '@nestjs/common';
 import { OffreService } from './offre.service';
 import { CreateOffreDto } from './dto/create-offre.dto';
 import { UpdateOffreDto } from './dto/update-offre.dto';
@@ -9,7 +9,7 @@ export class OffreController {
   constructor(private readonly offreService: OffreService) {}
 
   @Post()
-  async createAdmin(
+  async createOffre(
       @Res() response ,
       @Body() createOffreDto: CreateOffreDto) {
         try {
@@ -26,7 +26,42 @@ export class OffreController {
         }
       
     }
+  @Put("/updateStatusOffre/:id")
+  async UpdateStatus(
+    @Res() response,
+    @Param("id") offreId: string,
+  ){
+    try {
+      const existingOffre = await this.offreService.updateStatus(
+        offreId,
+      );
+      return response.status(HttpStatus.OK).json({
+        message: "Offre status has been successfully updated",
+        existingOffre,
+      });
+      
+    } catch (err) {
+            return response.status(err.status).json({
+              message: err.message,
+              status :HttpStatus.BAD_REQUEST
+            });
 
+    }
+  }
+
+    @Post('postuler')
+  async addCondidatToOffre(@Body() body: { offreId: string; condidatId: string }) {
+    const { offreId, condidatId } = body;
+
+    if (!offreId || !condidatId) {
+      throw new HttpException(
+        'Les champs offreId et condidatId sont obligatoires',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.offreService.postuler(offreId, condidatId);
+  }
   @Get()
   async findAllOffres(@Res() response) {
 try {

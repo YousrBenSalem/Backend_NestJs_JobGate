@@ -83,15 +83,15 @@ L'équipe Recrutement`,
   }
 
   async getEntrepriseById(entrepriseId: string):Promise<IEntreprise> {
-    const existingEntreprise = await this.entrepriseModel.findById(entrepriseId).exec();
+    const existingEntreprise = await this.entrepriseModel.findById(entrepriseId).populate("offreId");
     if(!existingEntreprise){
       throw new NotFoundException("entreprise not found");
       }
       return existingEntreprise;
   }
 
-  async updateEntreprise(entrepriseId: string, updateEntrepriseDto: UpdateEntrepriseDto) {
-    const updatedEntreprise = await this.entrepriseModel.findByIdAndUpdate(entrepriseId , updateEntrepriseDto ,{new : true});
+  async updateEntreprise(entrepriseId: string, updateEntrepriseDto: UpdateEntrepriseDto): Promise<IEntreprise> {
+    const updatedEntreprise = await this.entrepriseModel.findOneAndUpdate(  {_id:entrepriseId,item:'entreprise'} , updateEntrepriseDto ,{new : true});
     if(!updatedEntreprise){
       throw new NotFoundException("entreprise not found");
       }
@@ -105,4 +105,25 @@ L'équipe Recrutement`,
       }
       return deletedEntreprise;
   }
+
+    // function to update status of entreprise 
+  async updateStatus(
+    entrepriseId: string,
+    ): Promise<IEntreprise> {
+    /*   const existingEntreprise = await this.EntrepriseModel.findById(
+        {_id:entrepriseId,item:'entreprise'},
+        {status},
+        { new: true },
+        ); */
+        /*   const existingEntreprise = await this.EntrepriseModel.findById(
+        entrepriseId); */
+        const existingEntreprise = await this.entrepriseModel.findOneAndUpdate(
+          {_id:entrepriseId,item:'entreprise'} , {$set : {status :"Acceptable"}}, { new: true },);
+        if (!existingEntreprise) {
+          throw new NotFoundException(`Entreprise #${entrepriseId} not found`);
+          }
+          const updateEntreprise = await existingEntreprise.save()
+          return updateEntreprise;
+          
+          }
 }

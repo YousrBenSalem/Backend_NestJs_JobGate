@@ -59,4 +59,12 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }
+
+   @Put(':id/status')
+  async updateUserStatus(
+    @Param('id') id: string,
+    @Body('isOnline') isOnline: boolean,
+  ) {
+    return this.userService.updateUserStatus(id, isOnline);
+  }
 }

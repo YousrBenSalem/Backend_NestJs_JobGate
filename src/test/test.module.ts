@@ -4,6 +4,7 @@ import { TestService } from './test.service';
 import { TestController } from './test.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TestSchema } from './entities/test.entity';
+import { OffreSchema } from 'src/offre/entities/offre.entity';
 
 @Module({
   imports:[
@@ -11,6 +12,10 @@ import { TestSchema } from './entities/test.entity';
       {
         name:'test',
         schema:TestSchema
+      },
+      {
+        name:'offre',
+        schema:OffreSchema
       }
     ])
   ],

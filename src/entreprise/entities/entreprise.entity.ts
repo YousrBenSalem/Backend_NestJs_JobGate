@@ -20,10 +20,12 @@ export class Entreprise extends User {
   secteur:string ;
   @Prop()
   adresse:string ;
+  @Prop({default:"Pending"})
+  status:string ;
+
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"user"}]})
   condidatId : Types.ObjectId[];
-  @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"commentaire"}]})
-  commentaireId : Types.ObjectId[];
+
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"profilCondidat"}]})
   profilCondidatRecherchéId : Types.ObjectId[];
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"offre"}]})
