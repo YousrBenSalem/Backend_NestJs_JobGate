@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Document } from "mongoose";
 export interface IChat extends Document {
-  readonly  sender: string;
+  readonly  senderId: string;
   
-  readonly  receiver: string;
+  readonly  recipientId: string;
   
   readonly  content: string;
 }

@@ -2,6 +2,13 @@
 import { Types } from "mongoose";
 import { IUser } from "src/user/interface/user.interface";
 
+export interface IEvaluation {
+     condidatId : string;
+
+  rating: number;
+  comment: string;
+}
+
 export interface IEntreprise extends IUser{
     logo:string ;
     readonly   description:string ;
@@ -12,6 +19,7 @@ export interface IEntreprise extends IUser{
 
   readonly  adresse:string ;
      readonly status:string ;
+     evaluations :IEvaluation[];
 
    condidatId : Types.ObjectId[];
 

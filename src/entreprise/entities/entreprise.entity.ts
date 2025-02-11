@@ -5,6 +5,18 @@ import mongoose, { Types } from "mongoose";
 import { User } from "src/user/entities/user.entity";
 
 
+@Schema({ timestamps: true })
+export class Evaluation {
+  @Prop()
+  condidatId : string;
+  @Prop({ required: true })
+  rating: number;
+
+  @Prop({ required: true })
+  comment: string;
+
+
+}
 @Schema()
 export class Entreprise extends User {
     item :string
@@ -30,8 +42,8 @@ export class Entreprise extends User {
   profilCondidatRecherchéId : Types.ObjectId[];
   @Prop({type:[{type:mongoose.Schema.Types.ObjectId, ref:"offre"}]})
   offreId : Types.ObjectId[];
-    @Prop({type:mongoose.Schema.Types.ObjectId, ref:"experience"})
-  experienceId : Types.ObjectId;
+@Prop({ type: [Evaluation], default: [] })
+  evaluations: Evaluation[];
 
 
 }

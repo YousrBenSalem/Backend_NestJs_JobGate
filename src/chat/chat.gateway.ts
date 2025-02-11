@@ -1,38 +1,55 @@
 /* eslint-disable prettier/prettier */
-import {   OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
-import {Socket , Server} from "socket.io"
-
-
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  WebSocketServer,
+} from '@nestjs/websockets';
+import { Server, Socket } from 'socket.io';
+import { ChatService } from './chat.service';
 
 @WebSocketGateway({ cors: true })
-export class ChatGateway implements OnGatewayConnection , OnGatewayDisconnect {
-  @WebSocketServer() server: Server ;
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  @WebSocketServer()
+  server: Server;
 
-    private connectedUsers = new Map<string, string>(); // userId -> socketId
+  private onlineUsers = new Map<string, string>(); // Map userId -> socketId
 
+  constructor(private readonly chatService: ChatService) {}
 
-  handleConnection(client:Socket) {
-    console.log('new client connected ...', client.id);
-    this.server.emit('user-joined',{
-      message: `New User Joined the chat:${client.id}` ,
-    })
-      
+  handleConnection(client: Socket) {
+    console.log(`Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client:Socket) {
-    console.log(' client disconnected ...', client.id);
-      this.server.emit('user-left',{
-      message: `User Left the chat:${client.id}` ,
-    })
-      
+  handleDisconnect(client: Socket) {
+    console.log(`Client disconnected: ${client.id}`);
+    for (const [userId, socketId] of this.onlineUsers.entries()) {
+      if (socketId === client.id) this.onlineUsers.delete(userId);
+    }
   }
 
+  @SubscribeMessage('join')
+  handleJoin(client: Socket, userId: string) {
+    this.onlineUsers.set(userId, client.id);
+  }
 
   @SubscribeMessage('sendMessage')
-  handleMessage(client: Socket, payload: { sender: string, receiver: string, message: string }) {
-    const receiverSocketId = this.connectedUsers.get(payload.receiver);
-    if (receiverSocketId) {
-      this.server.to(receiverSocketId).emit('receiveMessage', payload);
+  async handleMessage(client: Socket, payload: { senderId: string; recipientId: string; content: string }) {
+    const savedMessage = await this.chatService.createMessage(payload);
+    const recipientSocket = this.onlineUsers.get(payload.recipientId);
+
+    if (recipientSocket) {
+      this.server.to(recipientSocket).emit('receiveMessage', savedMessage);
+    }
+  }
+
+  @SubscribeMessage('isTyping')
+  handleIsTyping(client: Socket, payload: { recipientId: string }) {
+    const recipientSocket = this.onlineUsers.get(payload.recipientId);
+
+    if (recipientSocket) {
+      this.server.to(recipientSocket).emit('typing', { from: client.id });
     }
   }
 }

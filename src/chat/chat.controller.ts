@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { UpdateChatDto } from './dto/update-chat.dto';
@@ -9,9 +10,15 @@ export class ChatController {
 
   @Post()
   create(@Body() createChatDto: CreateChatDto) {
-    return this.chatService.create(createChatDto);
+    return this.chatService.createMessage(createChatDto);
   }
-
+ @Get('messages')
+  getMessages(
+    @Query('user1Id') user1Id: string,
+    @Query('user2Id') user2Id: string,
+  ) {
+    return this.chatService.getMessagesBetweenUsers(user1Id, user2Id);
+  }
   @Get()
   findAll() {
     return this.chatService.findAll();

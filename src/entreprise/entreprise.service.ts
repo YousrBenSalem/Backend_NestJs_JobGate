@@ -3,7 +3,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateEntrepriseDto } from './dto/create-entreprise.dto';
 import { UpdateEntrepriseDto } from './dto/update-entreprise.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { IEntreprise } from './interface/entreprise.interface';
+import { IEntreprise , IEvaluation } from './interface/entreprise.interface';
+
 import { Model } from 'mongoose';
 import * as argon2 from "argon2";
 import * as crypto from 'crypto';
@@ -74,7 +75,7 @@ L'équipe Recrutement`,
   }
 
   async getAllEntreprises() : Promise <IEntreprise[]> {
-    const entrepriseData = await this.entrepriseModel.find({item: "entreprise"});
+    const entrepriseData = await this.entrepriseModel.find({item: "entreprise"}).populate("offreId");
     if(!entrepriseData || entrepriseData.length == 0){
       throw new NotFoundException("entreprises data not found")
       
@@ -126,4 +127,24 @@ L'équipe Recrutement`,
           return updateEntreprise;
           
           }
+
+async addEvaluation(
+    companyId: string,
+    condidatId:string,
+    rating: number,
+    comment: string,
+  ): Promise<IEntreprise> {
+    const company = await this.entrepriseModel.findById(companyId);
+    company.evaluations.push({
+      condidatId,
+      rating,
+      comment,
+    });
+    return company.save();
+  }
+
+    async getEvaluations(companyId: string): Promise<IEvaluation[]> {
+    const company = await this.entrepriseModel.findById(companyId);
+    return company.evaluations;
+  }
 }

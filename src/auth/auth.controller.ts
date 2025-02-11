@@ -15,6 +15,7 @@ export class AuthController {
   signin(@Body() data: AuthDto) {
     return this.authService.signIn(data);
   }
+  
   @UseGuards(RefreshTokenGuard)
   @Get('logout')
   logout(@Req() req: Request) {

@@ -1,8 +1,20 @@
 /* eslint-disable prettier/prettier */
-import { IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, Max, Min } from "class-validator";
 import { Types } from "mongoose";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 
+export class CreateEvaluationDto {
+     condidatId : string;
+
+  @IsInt()
+  @Min(1)
+  @Max(5)
+  rating: number;
+
+  @IsString()
+  @IsNotEmpty()
+  comment: string;
+}
 export class CreateEntrepriseDto extends CreateUserDto {
 logo:string ;
   @IsString()
@@ -28,4 +40,6 @@ logo:string ;
   
   readonly profilCondidatRecherchéId : Types.ObjectId[];
    offreId : Types.ObjectId[];
+
+    evaluations: CreateEvaluationDto[];
 }

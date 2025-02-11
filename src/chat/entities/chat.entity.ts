@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
 
 @Schema({timestamps:true})
 export class Chat extends Document {
   @Prop({ required: true })
-  sender: string;
+  senderId: string;
 
   @Prop({ required: true })
-  receiver: string;
+  recipientId: string;
 
   @Prop({ required: true })
   content: string;

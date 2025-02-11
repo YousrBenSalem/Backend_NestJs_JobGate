@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Type } from "class-transformer";
-import {  IsNumber, IsString } from "class-validator";
+import {   IsString } from "class-validator";
 import { Types } from "mongoose";
 import { CreateUserDto } from "src/user/dto/create-user.dto";
 
@@ -65,11 +64,11 @@ export class CreateCondidatDto extends CreateUserDto {
       @IsString()
 
     readonly adresse : string ;
-    @IsNumber()
-    @Type(()=>Number)
+    /* @IsNumber()
+    @Type(()=>Number) */
     readonly telephone : number ;
-    @IsNumber()
-    @Type(()=>Number)
+    /* @IsNumber()
+    @Type(()=>Number) */
 
     readonly cin : number ;
 

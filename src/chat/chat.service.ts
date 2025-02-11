@@ -17,9 +17,22 @@ export class ChatService {
 
 
 
-  async saveMessage(createChatDto: CreateChatDto):Promise<IChat> {
+  async createMessage(createChatDto: CreateChatDto):Promise<IChat> {
     const newMessage = await new this.chatModel(createChatDto)
     return newMessage.save()
+  }
+
+    async getMessagesBetweenUsers(
+    user1Id: string,
+    user2Id: string,
+  ): Promise<IChat[]> {
+    return this.chatModel.find({
+      where: [
+        { senderId: user1Id, recipientId: user2Id },
+        { senderId: user2Id, recipientId: user1Id },
+      ],
+      order: { createdAt: 'ASC' },
+    });
   }
 
   findAll() {

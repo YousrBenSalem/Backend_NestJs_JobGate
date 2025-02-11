@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { EntrepriseService } from './entreprise.service';
-import { CreateEntrepriseDto } from './dto/create-entreprise.dto';
+import { CreateEntrepriseDto, CreateEvaluationDto } from './dto/create-entreprise.dto';
 import { UpdateEntrepriseDto } from './dto/update-entreprise.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from "path";
@@ -138,5 +138,36 @@ export class EntrepriseController {
       return response.status(err.status).json(err.response);
     
   }
+  }
+
+
+
+  @Get(':id/evaluations')
+  async getEvaluations(@Param('id') id: string,
+  @Res() response ,) {
+
+
+      try {
+    const evaluations = await this.entrepriseService.getEvaluations(id);
+    return response.status(HttpStatus.OK).json({ message: 'evaluations get successfully', evaluations });
+    
+  } catch (err) {
+      return response.status(err.status).json(err.response);
+    
+  }
+  
+  }
+
+  @Post(':id/evaluations')
+  async addEvaluation(
+    @Param('id') idCompany: string,
+    @Body() createEvaluationDto: CreateEvaluationDto,
+  ) {
+    return this.entrepriseService.addEvaluation(
+      idCompany,
+      createEvaluationDto.condidatId,
+      createEvaluationDto.rating,
+      createEvaluationDto.comment,
+    );
   }
 }

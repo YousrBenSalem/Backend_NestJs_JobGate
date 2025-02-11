@@ -50,7 +50,7 @@ export class OffreController {
   }
 
     @Post('postuler')
-  async addCondidatToOffre(@Body() body: { offreId: string; condidatId: string }) {
+  async addCondidatToOffre(@Body() body: { offreId: string; condidatId: string }, @Res() response) {
     const { offreId, condidatId } = body;
 
     if (!offreId || !condidatId) {
@@ -60,7 +60,11 @@ export class OffreController {
       );
     }
 
-    return this.offreService.postuler(offreId, condidatId);
+    const postuler = await this.offreService.postuler(offreId, condidatId);
+      return response.status(HttpStatus.OK).json({
+        message: 'post with successfully',
+        postuler
+      });
   }
   @Get()
   async findAllOffres(@Res() response) {
